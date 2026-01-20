@@ -1,0 +1,21 @@
+# .NET
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+publish/
+appsettings.Development.json
+Properties/launchSettings.json
+*.user
+
+# macOS
+.DS_Store
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Docker
+.dockerignore
+
+# IDEs
+.vscode/
+.idea/
