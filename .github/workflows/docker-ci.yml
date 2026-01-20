@@ -1,0 +1,22 @@
+name: CI Docker Build
+run-name: Build de Docker por @${{ github.actor }} - ${{ github.event.head_commit.message }}
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Construir imagen de Docker
+        # Recuerda que ./WebKsApi es la carpeta donde está tu Dockerfile
+        run: docker build -t webksapi-api:latest ./WebKsApi
+
+      - name: Verificar imagen creada
+        run: docker images | grep webksapi
