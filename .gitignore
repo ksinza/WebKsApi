@@ -13,8 +13,7 @@ Properties/launchSettings.json
 .AppleDouble
 .LSOverride
 
-# Docker
-.dockerignore
+
 
 # IDEs
 .vscode/

@@ -1,0 +1,20 @@
+# Ignorar carpetas de compilación local
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+publish/
+
+# Ignorar archivos del sistema macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Ignorar configuración de Git y Docker
+.git/
+.github/
+.dockerignore
+Dockerfile
+
+# Ignorar archivos de usuario y temporales
+*.user
+*.swp
