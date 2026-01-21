@@ -1,22 +1,36 @@
-name: CI Docker Build
-run-name: Build de Docker por @${{ github.actor }} - ${{ github.event.head_commit.message }}
+name: CI/CD to AWS ECR
+run-name: Push a ECR por @${{ github.actor }} - ${{ github.event.head_commit.message }}
 
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
 
-      - name: Construir imagen de Docker
-        # Recuerda que ./WebKsApi es la carpeta donde está tu Dockerfile
-        run: docker build -t webksapi-api:latest ./WebKsApi
+      - name: Configurar credenciales de AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1 
 
-      - name: Verificar imagen creada
-        run: docker images | grep webksapi
+      - name: Login a Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: webksapi-repo
+          IMAGE_TAG: latest
+        run: |
+          # Construimos la imagen apuntando a tu API
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./WebKsApi
+          
+          # La subimos a tu repositorio privado
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
